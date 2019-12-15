@@ -10,7 +10,7 @@ public class ShowRepairOrdersOperation implements MenuItemOperation {
     @Override
     public MenuItem.NextAction execute() {
         logger.debug("Show Repair Order Operation has been selected");
-        return MenuItem.NextAction.PROMPT_MENU;
+        return MenuItem.NextAction.PRINCIPAL_MENU;
     }
 
 }

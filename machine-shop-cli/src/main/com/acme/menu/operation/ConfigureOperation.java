@@ -11,7 +11,7 @@ public class ConfigureOperation implements MenuItemOperation {
     @Override
     public MenuItem.NextAction execute() {
         logger.debug("Configure Operation has been selected");
-        return MenuItem.NextAction.PROMPT_MENU;
+        return MenuItem.NextAction.CONFIGURATION_MENU;
     }
 
 }

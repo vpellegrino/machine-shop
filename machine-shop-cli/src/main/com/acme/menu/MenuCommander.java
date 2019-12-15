@@ -1,5 +1,6 @@
 package com.acme.menu;
 
+import com.acme.menu.configuration.ConfigurationMenuItem;
 import org.beryx.textio.TextIO;
 
 public class MenuCommander {
@@ -11,13 +12,28 @@ public class MenuCommander {
     }
 
     public void promptMenuChoices() {
-        MenuItem.NextAction nextAction = textIO.newEnumInputReader(MenuItem.class)
-                .read("Machine Shop - Available operations:")
-                .execute();
+        doNextAction(
+                textIO.newEnumInputReader(MenuItem.class)
+                        .read("Machine Shop - Available operations:")
+                        .execute()
+        );
+    }
 
+    private void promptConfigurationMenuChoices() {
+        doNextAction(
+                textIO.newEnumInputReader(ConfigurationMenuItem.class)
+                        .read("Configure your Machine Shop:")
+                        .execute()
+        );
+    }
+
+    private void doNextAction(MenuItem.NextAction nextAction) {
         switch (nextAction) {
-            case PROMPT_MENU:
+            case PRINCIPAL_MENU:
                 promptMenuChoices();
+                break;
+            case CONFIGURATION_MENU:
+                promptConfigurationMenuChoices();
                 break;
             case DISPOSE_MENU:
                 disposeMenu();

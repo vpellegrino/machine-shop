@@ -11,7 +11,7 @@ public class CompleteRepairOrderOperation implements MenuItemOperation {
     @Override
     public MenuItem.NextAction execute() {
         logger.debug("Complete Repair Order Operation has been selected");
-        return MenuItem.NextAction.PROMPT_MENU;
+        return MenuItem.NextAction.PRINCIPAL_MENU;
     }
 
 }

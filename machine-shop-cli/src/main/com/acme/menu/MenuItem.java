@@ -27,6 +27,6 @@ public enum MenuItem {
     }
 
     public enum NextAction {
-        PROMPT_MENU, DISPOSE_MENU
+        PRINCIPAL_MENU, CONFIGURATION_MENU, DISPOSE_MENU
     }
 }
