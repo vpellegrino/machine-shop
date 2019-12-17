@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.acme.domain.platform.PlatformNotFoundException.PROVIDED_PLATFORM_DOES_NOT_EXISTS;
 import static com.acme.menu.operation.PlatformOperation.PLATFORM_NAME;
 
 public class AddRepairOrderOperation implements MenuItemOperation {
@@ -38,7 +39,7 @@ public class AddRepairOrderOperation implements MenuItemOperation {
         try {
             platform = platformRepository.platform(platformName).orElseThrow(PlatformNotFoundException::new);
         } catch (PlatformNotFoundException e) {
-            textIO.getTextTerminal().println("Provided platform does not exists");
+            textIO.getTextTerminal().println(PROVIDED_PLATFORM_DOES_NOT_EXISTS);
             return MenuItem.NextAction.PRINCIPAL_MENU;
         }
         PlatformConfiguration platformConfiguration = platform.getPlatformConfiguration();
