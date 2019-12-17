@@ -6,7 +6,7 @@ public class RepairType {
     private final String name;
     private final double hoursNeededToComplete;
 
-    public RepairType(String name, long hoursNeededToComplete) {
+    public RepairType(String name, double hoursNeededToComplete) {
         this.name = name;
         this.hoursNeededToComplete = hoursNeededToComplete;
     }

@@ -11,17 +11,25 @@ public class PlatformConfiguration {
     private final List<Vehicle.Type> supportedVehicles;
     private final List<RepairType> supportedRepairTypes;
 
-    PlatformConfiguration(List<Vehicle.Type> supportedVehicles, List<RepairType> supportedRepairTypes) {
+    public PlatformConfiguration(List<Vehicle.Type> supportedVehicles, List<RepairType> supportedRepairTypes) {
         this.supportedVehicles = supportedVehicles;
         this.supportedRepairTypes = supportedRepairTypes;
     }
 
-    List<RepairType> getSupportedRepairTypes() {
+    public List<RepairType> getSupportedRepairTypes() {
         return new ArrayList<>(supportedRepairTypes);
     }
 
-    List<Vehicle.Type> getSupportedVehicles() {
+    public List<Vehicle.Type> getSupportedVehicles() {
         return new ArrayList<>(supportedVehicles);
+    }
+
+    public void addSupportedRepairType(String name, double hoursNeededToComplete) {
+        supportedRepairTypes.add(new RepairType(name, hoursNeededToComplete));
+    }
+
+    public void addSupportedVehicle(Vehicle.Type type) {
+        supportedVehicles.add(type);
     }
 
     @Override

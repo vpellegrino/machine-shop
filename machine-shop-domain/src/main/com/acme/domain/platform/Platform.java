@@ -14,10 +14,18 @@ public class Platform {
     private final PlatformConfiguration platformConfiguration;
     private double hoursOfRemainingWork;
 
-    Platform(String name, PlatformConfiguration platformConfiguration) {
+    public Platform(String name, PlatformConfiguration platformConfiguration) {
         repairOrders = new LinkedList<>();
         this.name = name;
         this.platformConfiguration = platformConfiguration;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public PlatformConfiguration getPlatformConfiguration() {
+        return platformConfiguration;
     }
 
     @Override
@@ -44,11 +52,11 @@ public class Platform {
                 '}';
     }
 
-    Queue<RepairOrder> getRepairOrders() {
+    public Queue<RepairOrder> getRepairOrders() {
         return new LinkedList<>(repairOrders);
     }
 
-    double newRepairOrder(Vehicle vehicle, List<RepairType> repairsToBeExecuted) {
+    public double newRepairOrder(Vehicle vehicle, List<RepairType> repairsToBeExecuted) {
         if (vehicleIsSupportedByPlatform(vehicle)) {
             String errorMessage = String.format("Platform %s does not support vehicles of type %s", name, vehicle.getType());
             throw new VehicleNotSupportedException(errorMessage);
@@ -61,7 +69,7 @@ public class Platform {
         return incrementHoursOfRemainingWork(repairsToBeExecuted);
     }
 
-    Optional<RepairOrder> markNextRepairOrderAsCompleted() {
+    public Optional<RepairOrder> markNextRepairOrderAsCompleted() {
         decrementHoursOfRemainingWork();
         return Optional.ofNullable(repairOrders.poll());
     }
