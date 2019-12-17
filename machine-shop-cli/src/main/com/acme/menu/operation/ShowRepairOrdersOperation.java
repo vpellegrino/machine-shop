@@ -13,6 +13,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.acme.menu.operation.PlatformOperation.PLATFORM_NAME;
+
 public class ShowRepairOrdersOperation implements MenuItemOperation {
 
     private static final Logger logger = LoggerFactory.getLogger(ShowRepairOrdersOperation.class);
@@ -24,7 +26,7 @@ public class ShowRepairOrdersOperation implements MenuItemOperation {
 
         String platformName = textIO.newStringInputReader()
                 .withNumberedPossibleValues(platformRepository.allPlatformsNames())
-                .read("Platform name");
+                .read(PLATFORM_NAME);
 
         textIO.getTextTerminal().println(repairOrdersForPlatform(platformRepository, platformName));
 

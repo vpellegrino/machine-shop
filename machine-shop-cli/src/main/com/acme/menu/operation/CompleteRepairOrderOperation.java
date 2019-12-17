@@ -9,6 +9,8 @@ import org.beryx.textio.TextIO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static com.acme.menu.operation.PlatformOperation.PLATFORM_NAME;
+
 public class CompleteRepairOrderOperation implements MenuItemOperation {
 
     private static final Logger logger = LoggerFactory.getLogger(CompleteRepairOrderOperation.class);
@@ -19,7 +21,7 @@ public class CompleteRepairOrderOperation implements MenuItemOperation {
 
         String platformName = textIO.newStringInputReader()
                 .withNumberedPossibleValues(platformRepository.allPlatformsNames())
-                .read("Platform name");
+                .read(PLATFORM_NAME);
 
         Platform platform = platformRepository.platform(platformName).orElseThrow(PlatformNotFoundException::new);
         String commandFeedback = platform

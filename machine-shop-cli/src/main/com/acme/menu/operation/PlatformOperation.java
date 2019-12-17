@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 public class PlatformOperation implements MenuItemOperation {
 
     private static final Logger logger = LoggerFactory.getLogger(PlatformOperation.class);
+    static final String PLATFORM_NAME = "Platform name";
 
     private ConfigurationMenuItem.ConfigOperation configOperation;
 
@@ -51,7 +52,7 @@ public class PlatformOperation implements MenuItemOperation {
     private void createPlatform(TextIO textIO, PlatformRepository platformRepository) {
         String platformName = textIO.newStringInputReader()
                 .withNumberedPossibleValues(platformRepository.allPlatformsNames())
-                .read("Platform name");
+                .read(PLATFORM_NAME);
 
         Platform platformToCreate = new Platform(platformName, configurePlatform(textIO));
 
@@ -114,7 +115,7 @@ public class PlatformOperation implements MenuItemOperation {
     private void deletePlatform(TextIO textIO, PlatformRepository platformRepository) {
         String platformName = textIO.newStringInputReader()
                 .withNumberedPossibleValues(platformRepository.allPlatformsNames())
-                .read("Platform name");
+                .read(PLATFORM_NAME);
 
         boolean deleteConfirmed = textIO.newBooleanInputReader()
                 .withDefaultValue(true)

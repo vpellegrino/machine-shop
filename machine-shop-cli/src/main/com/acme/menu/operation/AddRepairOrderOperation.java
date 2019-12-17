@@ -17,9 +17,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.acme.menu.operation.PlatformOperation.PLATFORM_NAME;
+
 public class AddRepairOrderOperation implements MenuItemOperation {
 
     private static final Logger logger = LoggerFactory.getLogger(AddRepairOrderOperation.class);
+    static final String NUMBER_OF_REPAIRS_TO_BE_EXECUTED = "Number of repairs to be executed:";
+    static final String REPAIR_TYPE = "Repair type:";
+    static final String VEHICLE_TYPE = "Vehicle type:";
+    static final String VEHICLE_LICENSE_PLATE = "Vehicle license plate:";
 
     @Override
     public MenuItem.NextAction execute(TextIO textIO, PlatformRepository platformRepository) {
@@ -27,14 +33,29 @@ public class AddRepairOrderOperation implements MenuItemOperation {
 
         String platformName = textIO.newStringInputReader()
                 .withNumberedPossibleValues(platformRepository.allPlatformsNames())
-                .read("Platform name");
-
-        Platform platform = platformRepository.platform(platformName).orElseThrow(PlatformNotFoundException::new);
+                .read(PLATFORM_NAME);
+        Platform platform;
+        try {
+            platform = platformRepository.platform(platformName).orElseThrow(PlatformNotFoundException::new);
+        } catch (PlatformNotFoundException e) {
+            String errorMsg = "Provided platform does not exists";
+            return somethingNotConfiguredWell(errorMsg, textIO, e);
+        }
         PlatformConfiguration platformConfiguration = platform.getPlatformConfiguration();
-        double hoursNeededForCompletingRepair = platform.newRepairOrder(
-                configureVehicle(textIO, platformConfiguration),
-                scheduleRepairs(textIO, platformConfiguration)
-        );
+        double hoursNeededForCompletingRepair;
+
+        try {
+            hoursNeededForCompletingRepair = platform.newRepairOrder(
+                    configureVehicle(textIO, platformConfiguration),
+                    scheduleRepairs(textIO, platformConfiguration)
+            );
+        } catch (VehicleNotSupportedException e) {
+            String errorMsg = "Provided vehicle is not present in the platform configuration";
+            return somethingNotConfiguredWell(errorMsg, textIO, e);
+        } catch (RepairTypeNotSupportedException e) {
+            String errorMsg = "Provided repair type is not present in the platform configuration";
+            return somethingNotConfiguredWell(errorMsg, textIO, e);
+        }
         platformRepository.savePlatform(platform);
 
         textIO.getTextTerminal().println(
@@ -44,13 +65,19 @@ public class AddRepairOrderOperation implements MenuItemOperation {
         return MenuItem.NextAction.PRINCIPAL_MENU;
     }
 
-    private List<RepairType> scheduleRepairs(TextIO textIO, PlatformConfiguration platformConfiguration) {
+    private MenuItem.NextAction somethingNotConfiguredWell(String errorMsg, TextIO textIO, RuntimeException e) {
+        logger.error(errorMsg, e);
+        textIO.getTextTerminal().println(errorMsg);
+        return MenuItem.NextAction.PRINCIPAL_MENU;
+    }
+
+    List<RepairType> scheduleRepairs(TextIO textIO, PlatformConfiguration platformConfiguration) {
         List<RepairType> repairsToBeExecuted = new ArrayList<>();
 
         int numberOfRepairs = textIO.newIntInputReader()
                 .withDefaultValue(1)
                 .withMinVal(1)
-                .read("Number of repairs to be executed:");
+                .read(NUMBER_OF_REPAIRS_TO_BE_EXECUTED);
 
         for (int i = 0; i < numberOfRepairs; i++) {
             RepairType repairType = configureRepair(textIO, platformConfiguration);
@@ -62,7 +89,7 @@ public class AddRepairOrderOperation implements MenuItemOperation {
     private RepairType configureRepair(TextIO textIO, PlatformConfiguration platformConfiguration) {
         String repairTypeName = textIO.newStringInputReader()
                 .withNumberedPossibleValues(repairTypes(platformConfiguration))
-                .read("Repair type:");
+                .read(REPAIR_TYPE);
 
         return platformConfiguration.getSupportedRepairTypes().stream()
                 .filter(repairType -> repairTypeName.equals(repairType.getName()))
@@ -77,15 +104,15 @@ public class AddRepairOrderOperation implements MenuItemOperation {
                 .collect(Collectors.toList());
     }
 
-    private Vehicle configureVehicle(TextIO textIO, PlatformConfiguration platformConfiguration) {
+    Vehicle configureVehicle(TextIO textIO, PlatformConfiguration platformConfiguration) {
         String vehicleTypeName = textIO.newStringInputReader()
                 .withNumberedPossibleValues(vehicleTypes(platformConfiguration))
-                .read("Vehicle type:");
+                .read(VEHICLE_TYPE);
 
         String vehicleLicensePlate = textIO.newStringInputReader()
                 .withMinLength(5)
                 .withMaxLength(7)
-                .read("Vehicle license plate:");
+                .read(VEHICLE_LICENSE_PLATE);
         return new Vehicle(vehicleTypeByName(platformConfiguration, vehicleTypeName), vehicleLicensePlate);
     }
 
