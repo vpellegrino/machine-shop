@@ -1,0 +1,15 @@
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.acme</groupId>
+    <artifactId>machine-shop</artifactId>
+    <version>1.0</version>
+    <name>machine-shop</name>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>machine-shop-domain</module>
+        <module>machine-shop-persistence</module>
+        <module>machine-shop-cli</module>
+    </modules>
+</project>
