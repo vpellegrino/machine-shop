@@ -15,7 +15,7 @@ public class MenuCommander {
         doNextAction(
                 textIO.newEnumInputReader(MenuItem.class)
                         .read("Machine Shop - Available operations:")
-                        .execute()
+                        .execute(textIO)
         );
     }
 
@@ -23,7 +23,7 @@ public class MenuCommander {
         doNextAction(
                 textIO.newEnumInputReader(ConfigurationMenuItem.class)
                         .read("Configure your Machine Shop:")
-                        .execute()
+                        .execute(textIO)
         );
     }
 

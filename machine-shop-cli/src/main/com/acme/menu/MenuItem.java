@@ -1,6 +1,7 @@
 package com.acme.menu;
 
 import com.acme.menu.operation.*;
+import org.beryx.textio.TextIO;
 
 public enum MenuItem {
     SHOW_REPAIR_ORDERS("Show all repair orders, scheduled for today", new ShowRepairOrdersOperation()),
@@ -22,8 +23,8 @@ public enum MenuItem {
         return this.description;
     }
 
-    public NextAction execute() {
-        return itemOperation.execute();
+    public NextAction execute(TextIO textIO) {
+        return itemOperation.execute(textIO);
     }
 
     public enum NextAction {

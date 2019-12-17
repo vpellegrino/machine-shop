@@ -2,15 +2,16 @@ package com.acme.menu.configuration;
 
 import com.acme.menu.operation.MenuItemOperation;
 import com.acme.menu.operation.PlatformOperation;
+import org.beryx.textio.TextIO;
 
 import static com.acme.menu.MenuItem.NextAction;
+import static com.acme.menu.configuration.ConfigurationMenuItem.ConfigOperation.*;
 
 public enum ConfigurationMenuItem {
-    LIST_ALL_PLATFORMS("List all platforms", new PlatformOperation(CrudOperation.GET_ALL)),
-    ADD_PLATFORM("Add a platform", new PlatformOperation(CrudOperation.CREATE)),
-    UPDATE_PLATFORM("Update a platform", new PlatformOperation(CrudOperation.UPDATE)),
-    DELETE_PLATFORM("Delete a platform", new PlatformOperation(CrudOperation.DELETE)),
-    PRINCIPAL_MENU("Go to the principal menu", () -> NextAction.PRINCIPAL_MENU);
+    LIST_ALL_PLATFORMS("List all platforms", new PlatformOperation(GET_ALL)),
+    ADD_PLATFORM("Add a platform", new PlatformOperation(CREATE)),
+    DELETE_PLATFORM("Delete a platform", new PlatformOperation(DELETE)),
+    PRINCIPAL_MENU("Go to the principal menu", (TextIO textIO) -> NextAction.PRINCIPAL_MENU);
 
     private final String description;
     private final MenuItemOperation itemOperation;
@@ -25,12 +26,12 @@ public enum ConfigurationMenuItem {
         return this.description;
     }
 
-    public NextAction execute() {
-        return itemOperation.execute();
+    public NextAction execute(TextIO textIO) {
+        return itemOperation.execute(textIO);
     }
 
-    public enum CrudOperation {
-        CREATE, GET_ALL, UPDATE, DELETE
+    public enum ConfigOperation {
+        CREATE, GET_ALL, DELETE
     }
 
 }

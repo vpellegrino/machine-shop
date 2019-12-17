@@ -15,7 +15,6 @@
     <build>
         <finalName>${project.artifactId}</finalName>
         <sourceDirectory>src/main</sourceDirectory>
-        <testSourceDirectory>src/test</testSourceDirectory>
         <plugins>
             <!-- this plugin produces one executable fat jar -->
             <plugin>
@@ -67,6 +66,12 @@
         <dependency>
             <groupId>com.acme</groupId>
             <artifactId>machine-shop-domain</artifactId>
+            <version>1.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.acme</groupId>
+            <artifactId>machine-shop-persistence</artifactId>
             <version>1.0</version>
             <scope>compile</scope>
         </dependency>
