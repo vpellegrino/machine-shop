@@ -51,8 +51,12 @@ public class PlatformOperation implements MenuItemOperation {
 
     private void createPlatform(TextIO textIO, PlatformRepository platformRepository) {
         String platformName = textIO.newStringInputReader()
-                .withNumberedPossibleValues(platformRepository.allPlatformsNames())
                 .read(PLATFORM_NAME);
+
+        if (platformRepository.allPlatformsNames().contains(platformName)) {
+            textIO.getTextTerminal().println(String.format("Platform with name %s already exists - Nothing changed", platformName));
+            return;
+        }
 
         Platform platformToCreate = new Platform(platformName, configurePlatform(textIO));
 
@@ -113,8 +117,15 @@ public class PlatformOperation implements MenuItemOperation {
     }
 
     private void deletePlatform(TextIO textIO, PlatformRepository platformRepository) {
+        List<String> existingPlatforms = platformRepository.allPlatformsNames();
+
+        if (existingPlatforms.isEmpty()) {
+            textIO.getTextTerminal().println("There is no platform to delete");
+            return;
+        }
+
         String platformName = textIO.newStringInputReader()
-                .withNumberedPossibleValues(platformRepository.allPlatformsNames())
+                .withNumberedPossibleValues(existingPlatforms)
                 .read(PLATFORM_NAME);
 
         boolean deleteConfirmed = textIO.newBooleanInputReader()
