@@ -9,7 +9,6 @@ import com.acme.domain.vehicle.Vehicle;
 import com.acme.domain.vehicle.VehicleNotSupportedException;
 import com.acme.menu.MenuItem;
 import com.acme.persistence.PlatformRepository;
-import com.acme.persistence.PlatformRepositoryImpl;
 import org.beryx.textio.TextIO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,10 +21,8 @@ public class AddRepairOrderOperation implements MenuItemOperation {
 
     private static final Logger logger = LoggerFactory.getLogger(AddRepairOrderOperation.class);
 
-    private PlatformRepository platformRepository = PlatformRepositoryImpl.getInstance();
-
     @Override
-    public MenuItem.NextAction execute(TextIO textIO) {
+    public MenuItem.NextAction execute(TextIO textIO, PlatformRepository platformRepository) {
         logger.debug("Add Repair Order Operation has been selected");
 
         String platformName = textIO.newStringInputReader()

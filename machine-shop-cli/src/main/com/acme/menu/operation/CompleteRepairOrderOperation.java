@@ -5,7 +5,6 @@ import com.acme.domain.platform.PlatformNotFoundException;
 import com.acme.domain.repair.RepairOrder;
 import com.acme.menu.MenuItem;
 import com.acme.persistence.PlatformRepository;
-import com.acme.persistence.PlatformRepositoryImpl;
 import org.beryx.textio.TextIO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,10 +13,8 @@ public class CompleteRepairOrderOperation implements MenuItemOperation {
 
     private static final Logger logger = LoggerFactory.getLogger(CompleteRepairOrderOperation.class);
 
-    private PlatformRepository platformRepository = PlatformRepositoryImpl.getInstance();
-
     @Override
-    public MenuItem.NextAction execute(TextIO textIO) {
+    public MenuItem.NextAction execute(TextIO textIO, PlatformRepository platformRepository) {
         logger.debug("Complete Repair Order Operation has been selected");
 
         String platformName = textIO.newStringInputReader()

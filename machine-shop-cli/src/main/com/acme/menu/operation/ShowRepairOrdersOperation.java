@@ -5,7 +5,6 @@ import com.acme.domain.repair.RepairOrder;
 import com.acme.domain.repair.RepairType;
 import com.acme.menu.MenuItem;
 import com.acme.persistence.PlatformRepository;
-import com.acme.persistence.PlatformRepositoryImpl;
 import org.beryx.textio.TextIO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,22 +18,20 @@ public class ShowRepairOrdersOperation implements MenuItemOperation {
     private static final Logger logger = LoggerFactory.getLogger(ShowRepairOrdersOperation.class);
     private static final String STRING_JOIN_DELIMITER = ", ";
 
-    private PlatformRepository platformRepository = PlatformRepositoryImpl.getInstance();
-
     @Override
-    public MenuItem.NextAction execute(TextIO textIO) {
+    public MenuItem.NextAction execute(TextIO textIO, PlatformRepository platformRepository) {
         logger.debug("Show Repair Order Operation has been selected");
 
         String platformName = textIO.newStringInputReader()
                 .withNumberedPossibleValues(platformRepository.allPlatformsNames())
                 .read("Platform name");
 
-        textIO.getTextTerminal().println(repairOrdersForPlatform(platformName));
+        textIO.getTextTerminal().println(repairOrdersForPlatform(platformRepository, platformName));
 
         return MenuItem.NextAction.PRINCIPAL_MENU;
     }
 
-    private List<String> repairOrdersForPlatform(String platformName) {
+    private List<String> repairOrdersForPlatform(PlatformRepository platformRepository, String platformName) {
         return platformRepository.platform(platformName)
                 .map(this::plannedRepairOrders)
                 .orElse(Collections.emptyList());

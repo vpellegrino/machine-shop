@@ -1,6 +1,7 @@
 package com.acme.menu.operation;
 
 import com.acme.menu.MenuItem;
+import com.acme.persistence.PlatformRepository;
 import org.beryx.textio.TextIO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +13,7 @@ public class ExitOperation implements MenuItemOperation {
     private static final Logger logger = LoggerFactory.getLogger(ExitOperation.class);
 
     @Override
-    public MenuItem.NextAction execute(TextIO textIO) {
+    public MenuItem.NextAction execute(TextIO textIO, PlatformRepository platformRepository) {
         logger.debug("Exit Operation has been selected");
         return NextAction.DISPOSE_MENU;
     }

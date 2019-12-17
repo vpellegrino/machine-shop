@@ -2,6 +2,7 @@ package com.acme.menu.configuration;
 
 import com.acme.menu.operation.MenuItemOperation;
 import com.acme.menu.operation.PlatformOperation;
+import com.acme.persistence.PlatformRepository;
 import org.beryx.textio.TextIO;
 
 import static com.acme.menu.MenuItem.NextAction;
@@ -11,7 +12,7 @@ public enum ConfigurationMenuItem {
     LIST_ALL_PLATFORMS("List all platforms", new PlatformOperation(GET_ALL)),
     ADD_PLATFORM("Add a platform", new PlatformOperation(CREATE)),
     DELETE_PLATFORM("Delete a platform", new PlatformOperation(DELETE)),
-    PRINCIPAL_MENU("Go to the principal menu", (TextIO textIO) -> NextAction.PRINCIPAL_MENU);
+    PRINCIPAL_MENU("Go to the principal menu", (TextIO textIO, PlatformRepository platformRepository) -> NextAction.PRINCIPAL_MENU);
 
     private final String description;
     private final MenuItemOperation itemOperation;
@@ -26,8 +27,8 @@ public enum ConfigurationMenuItem {
         return this.description;
     }
 
-    public NextAction execute(TextIO textIO) {
-        return itemOperation.execute(textIO);
+    public NextAction execute(TextIO textIO, PlatformRepository platformRepository) {
+        return itemOperation.execute(textIO, platformRepository);
     }
 
     public enum ConfigOperation {

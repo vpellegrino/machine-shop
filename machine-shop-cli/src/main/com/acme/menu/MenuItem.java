@@ -1,6 +1,7 @@
 package com.acme.menu;
 
 import com.acme.menu.operation.*;
+import com.acme.persistence.PlatformRepository;
 import org.beryx.textio.TextIO;
 
 public enum MenuItem {
@@ -23,8 +24,8 @@ public enum MenuItem {
         return this.description;
     }
 
-    public NextAction execute(TextIO textIO) {
-        return itemOperation.execute(textIO);
+    public NextAction execute(TextIO textIO, PlatformRepository platformRepository) {
+        return itemOperation.execute(textIO, platformRepository);
     }
 
     public enum NextAction {

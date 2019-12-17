@@ -7,7 +7,6 @@ import com.acme.menu.MenuItem;
 import com.acme.menu.MenuItem.NextAction;
 import com.acme.menu.configuration.ConfigurationMenuItem;
 import com.acme.persistence.PlatformRepository;
-import com.acme.persistence.PlatformRepositoryImpl;
 import org.beryx.textio.TextIO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,8 +19,6 @@ public class PlatformOperation implements MenuItemOperation {
 
     private static final Logger logger = LoggerFactory.getLogger(PlatformOperation.class);
 
-    private PlatformRepository platformRepository = PlatformRepositoryImpl.getInstance();
-
     private ConfigurationMenuItem.ConfigOperation configOperation;
 
     public PlatformOperation(ConfigurationMenuItem.ConfigOperation configOperation) {
@@ -29,20 +26,20 @@ public class PlatformOperation implements MenuItemOperation {
     }
 
     @Override
-    public MenuItem.NextAction execute(TextIO textIO) {
+    public MenuItem.NextAction execute(TextIO textIO, PlatformRepository platformRepository) {
         if (logger.isDebugEnabled()) {
             logger.debug(String.format("Platform Operation (%s) has been selected", configOperation));
         }
 
         switch (configOperation) {
             case CREATE:
-                createPlatform(textIO);
+                createPlatform(textIO, platformRepository);
                 break;
             case GET_ALL:
-                printAllPlatforms(textIO);
+                printAllPlatforms(textIO, platformRepository);
                 break;
             case DELETE:
-                deletePlatform(textIO);
+                deletePlatform(textIO, platformRepository);
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + configOperation);
@@ -51,7 +48,7 @@ public class PlatformOperation implements MenuItemOperation {
         return NextAction.CONFIGURATION_MENU;
     }
 
-    private void createPlatform(TextIO textIO) {
+    private void createPlatform(TextIO textIO, PlatformRepository platformRepository) {
         String platformName = textIO.newStringInputReader()
                 .withNumberedPossibleValues(platformRepository.allPlatformsNames())
                 .read("Platform name");
@@ -100,7 +97,7 @@ public class PlatformOperation implements MenuItemOperation {
         }
     }
 
-    private void printAllPlatforms(TextIO textIO) {
+    private void printAllPlatforms(TextIO textIO, PlatformRepository platformRepository) {
         List<String> platformNames = platformRepository.allPlatformsNames();
 
         if (platformNames.isEmpty()) {
@@ -114,7 +111,7 @@ public class PlatformOperation implements MenuItemOperation {
         );
     }
 
-    private void deletePlatform(TextIO textIO) {
+    private void deletePlatform(TextIO textIO, PlatformRepository platformRepository) {
         String platformName = textIO.newStringInputReader()
                 .withNumberedPossibleValues(platformRepository.allPlatformsNames())
                 .read("Platform name");
