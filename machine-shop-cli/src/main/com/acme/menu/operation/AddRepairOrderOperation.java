@@ -38,8 +38,8 @@ public class AddRepairOrderOperation implements MenuItemOperation {
         try {
             platform = platformRepository.platform(platformName).orElseThrow(PlatformNotFoundException::new);
         } catch (PlatformNotFoundException e) {
-            String errorMsg = "Provided platform does not exists";
-            return somethingNotConfiguredWell(errorMsg, textIO, e);
+            textIO.getTextTerminal().println("Provided platform does not exists");
+            return MenuItem.NextAction.PRINCIPAL_MENU;
         }
         PlatformConfiguration platformConfiguration = platform.getPlatformConfiguration();
         double hoursNeededForCompletingRepair;
@@ -50,11 +50,11 @@ public class AddRepairOrderOperation implements MenuItemOperation {
                     scheduleRepairs(textIO, platformConfiguration)
             );
         } catch (VehicleNotSupportedException e) {
-            String errorMsg = "Provided vehicle is not present in the platform configuration";
-            return somethingNotConfiguredWell(errorMsg, textIO, e);
+            textIO.getTextTerminal().println("Provided vehicle is not present in the platform configuration");
+            return MenuItem.NextAction.PRINCIPAL_MENU;
         } catch (RepairTypeNotSupportedException e) {
-            String errorMsg = "Provided repair type is not present in the platform configuration";
-            return somethingNotConfiguredWell(errorMsg, textIO, e);
+            textIO.getTextTerminal().println("Provided repair type is not present in the platform configuration");
+            return MenuItem.NextAction.PRINCIPAL_MENU;
         }
         platformRepository.savePlatform(platform);
 
@@ -62,12 +62,6 @@ public class AddRepairOrderOperation implements MenuItemOperation {
                 String.format("Estimated number of hours for completing such repair (plus waiting time) is %.2f", hoursNeededForCompletingRepair)
         );
 
-        return MenuItem.NextAction.PRINCIPAL_MENU;
-    }
-
-    private MenuItem.NextAction somethingNotConfiguredWell(String errorMsg, TextIO textIO, RuntimeException e) {
-        logger.error(errorMsg, e);
-        textIO.getTextTerminal().println(errorMsg);
         return MenuItem.NextAction.PRINCIPAL_MENU;
     }
 

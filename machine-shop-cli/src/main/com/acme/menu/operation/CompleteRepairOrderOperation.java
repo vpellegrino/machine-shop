@@ -22,17 +22,26 @@ public class CompleteRepairOrderOperation implements MenuItemOperation {
         String platformName = textIO.newStringInputReader()
                 .withNumberedPossibleValues(platformRepository.allPlatformsNames())
                 .read(PLATFORM_NAME);
+        Platform platform;
+        try {
+            platform = platformRepository.platform(platformName).orElseThrow(PlatformNotFoundException::new);
+        } catch (PlatformNotFoundException e) {
+            textIO.getTextTerminal().println("Provided platform does not exists");
+            return MenuItem.NextAction.PRINCIPAL_MENU;
+        }
 
-        Platform platform = platformRepository.platform(platformName).orElseThrow(PlatformNotFoundException::new);
+        textIO.getTextTerminal().println(completeRepairOrderFeedback(platformRepository, platform));
+
+        return MenuItem.NextAction.PRINCIPAL_MENU;
+    }
+
+    String completeRepairOrderFeedback(PlatformRepository platformRepository, Platform platform) {
         String commandFeedback = platform
                 .markNextRepairOrderAsCompleted()
                 .map(this::formatRepairOrderDetails)
                 .orElse("No repair order to process - Nothing changed");
         platformRepository.savePlatform(platform);
-
-        textIO.getTextTerminal().println(commandFeedback);
-
-        return MenuItem.NextAction.PRINCIPAL_MENU;
+        return commandFeedback;
     }
 
     private String formatRepairOrderDetails(RepairOrder repairOrder) {
